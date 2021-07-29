@@ -1,10 +1,7 @@
 ####input##################################################################
 args<-commandArgs(T)
-#i='./result/RNAExp.txt' #arg1
 i<-args[1]
-#control<-read.csv('./test/control.txt',header = FALSE)[,1] #arg2
 control<-read.csv(args[2],header = FALSE)[,1]
-#treat<-read.csv('./test/treat.txt',header = FALSE)[,1] #arg3
 treat<-read.csv(args[3],header = FALSE)[,1]
 
 ####follow up#############################################################
@@ -118,7 +115,6 @@ if(args[4]=='mean'){
   scores$immuneScore<-ifelse(scores$ImmuneScore<=median(scores$ImmuneScore),'L','H')
   scores$estimateScore<-ifelse(scores$ESTIMATEScore<=median(scores$ESTIMATEScore),'L','H')
 }
-#args[5]='OS'
 formulae <- list()
 element<-c("stromalScore","immuneScore","estimateScore")
 formulae <- lapply(element, function(x) as.formula(paste0('Surv(',args[5],'.time',',',args[5],')', " ~",x)))
@@ -127,8 +123,6 @@ p <- ggsurvplot_list(fits,title=c('      StromalScore','      ImmuneScore','    
                      data = scores,
                      risk.table = FALSE,
                      pval = TRUE,ylab = "Recurrence Free Probability",
-                     #break.time.by = 500,#legend = c(0.85,0.25),
-                     #ggtheme = theme_minimal(),
                      legend.title = ""
 )
 estSur<-arrange_ggsurvplots(p[1:length(p)], print = TRUE, ncol = 2, nrow = 2)
@@ -198,7 +192,6 @@ colnames(xCell)<-gsub(' ','',colnames(xCell))
 colnames(xCell)<-gsub('-','',colnames(xCell))
 colnames(xCell)<-gsub('[+]','',colnames(xCell))
 element<-colnames(xCell)[1:64]
-#arg<-'mean'
 a<-xCell
 for (m in 1:(ncol(xCell)-11)) {
   n1<-mean(xCell[,m])
@@ -214,7 +207,6 @@ for (m in 1:(ncol(xCell)-11)) {
 }
 
 formulae <- lapply(element, function(x) as.formula(paste0('Surv(',args[5],'.time',',',args[5],')', " ~",x)))
-#formulae <- lapply(element, function(x) as.formula(paste0('Surv(','OS','.time',',','OS',')', "~",x)))
 fits <- surv_fit(formulae, data = xCell)
 p <- ggsurvplot_list(fits,title=cellname[1:64],
                      data = xCell,
