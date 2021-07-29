@@ -1,4 +1,3 @@
-setwd('D:\\lxq\\快乐学习每一天\\大四\\ESCC项目整理')
 rm(list = ls())
 args<-commandArgs(T)
 #control<-read.csv('./test/control.txt',header = FALSE)[,1]
